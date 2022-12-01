@@ -75,6 +75,9 @@ namespace InstantReplayApp
         {
             this.pbLive.Invoke((MethodInvoker)(() => this.pbLive.Size = small_resolution));
 
+            Debug.WriteLine("new resolution : " + small_resolution.Width + "x" + small_resolution.Height);
+            
+
             int newPositionY = this.pbLive.Location.Y + this.pbLive.Size.Height + 10;
             int newPositionX = this.pbLive.Location.X + this.pbLive.Size.Width + 10;
 
@@ -82,8 +85,6 @@ namespace InstantReplayApp
             this.pbReplay.Location = new Point(newPositionX, this.pbReplay.Location.Y);
 
             this.ChangeDisplayResolutionLabel(small_resolution);
-            
-            
         }
 
         public void PositionTrackBarReplay()
@@ -273,6 +274,35 @@ namespace InstantReplayApp
         private void btnCut_Click(object sender, EventArgs e)
         {
             this.Cut();
+        }
+
+        private void tbSpeed_Scroll(object sender, EventArgs e)
+        {
+            this.StopReplayTimer();
+            this.SetReplayTimerInterval(this.MainManager.ReplayManager.SetIntervalFPS(this.tbSpeed.Value));
+            this.StartReplayTimer();
+        }
+
+        private void btnStartSecondWindow_Click(object sender, EventArgs e)
+        {
+            this.SecondDisplay();
+        }
+
+        public void SecondDisplay()
+        {
+            this.MainManager.NewDisplay();
+            this.Focus();
+            
+        }
+
+        public void GoLive()
+        {
+            this.MainManager.GoLiveReplay();
+        }
+
+        private void btnToLive_Click(object sender, EventArgs e)
+        {
+            this.GoLive();
         }
     }
 }

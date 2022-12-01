@@ -15,6 +15,7 @@ namespace InstantReplayApp
     {
         #region Variables privées
         private FrmMain _frmMain;
+        private DisplayReplay _frmReplay;
         private LiveInputManager _liveInputManager;
         private ReplayManager _replayManager;
 
@@ -26,6 +27,7 @@ namespace InstantReplayApp
         public FrmMain FrmMain { get => _frmMain; set => _frmMain = value; }
         internal LiveInputManager LiveInputManager { get => _liveInputManager; set => _liveInputManager = value; }
         internal ReplayManager ReplayManager { get => _replayManager; set => _replayManager = value; }
+        public DisplayReplay FrmReplay { get => _frmReplay; set => _frmReplay = value; }
         #endregion
 
         /// <summary>
@@ -39,6 +41,8 @@ namespace InstantReplayApp
             }
         }
 
+        
+
         /// <summary>
         /// Constructeur par défaut du manager
         /// </summary>
@@ -50,6 +54,7 @@ namespace InstantReplayApp
             this.ReplayManager = new ReplayManager(this);
 
             this.ReplayManager.IsReplayLive = true;
+            this.FrmReplay = new DisplayReplay(this.ReplayManager);
         }
 
 
@@ -64,8 +69,8 @@ namespace InstantReplayApp
 
             this.FrmMain.ChangeInputResolutionLabel(full, fps);
             this.FrmMain.ChangeDisplayResolutionLabel(small);
-            this.FrmMain.ChangePictureBoxResolution(small);
-            this.FrmMain.ChangeReplayResolution(small);
+            //this.FrmMain.ChangePictureBoxResolution(small);
+            //this.FrmMain.ChangeReplayResolution(small);
 
             this.ReplayManager.ReplaySize = small;
         }
@@ -205,10 +210,17 @@ namespace InstantReplayApp
         public void StreamReplay()
         {
             this._replayIndex = DEFAULT_REPLAY_INDEX;
-            int interval = (int)(1 / (this.ReplayManager.Buffer.Fps * 0.001));
+            int interval = this.ReplayManager.GetIntervalBasedOnFPS();
             this.FrmMain.SetReplayTimerInterval(interval);
             this.FrmMain.StartReplayTimer();
             this.FrmMain.UpdateTrackBarReplayMaximum(this.ReplayManager.ToDisplay.Count);
+        }
+
+        
+
+        public void ResetPlayBackFPS()
+        {
+            this.ReplayManager.PlayBackFPS = ReplayManager.DEFAULT_PLAYBACK_FPS;
         }
 
         public void StreamReplayIntervalTick()
@@ -224,6 +236,26 @@ namespace InstantReplayApp
         }
 
 
+        #endregion
+
+        #region Replay Display
+
+        public void NewDisplay()
+        {
+            this.FrmReplay = new DisplayReplay(this.ReplayManager);
+            this.FrmReplay.Show();
+            TaskBar.Show();
+        }
+
+        public void CloseDisplay()
+        {
+            this.FrmReplay.Close();
+        }
+
+        public void GoLiveReplay()
+        {
+            this.FrmReplay.StartLive();
+        }
         #endregion
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace InstantReplayApp
 {
-    internal class Buffer
+    public class Buffer
     {
         private List<Bitmap> _bufferImages;
         private int _bufferSize;

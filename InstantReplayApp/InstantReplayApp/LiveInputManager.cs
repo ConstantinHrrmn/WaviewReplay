@@ -11,7 +11,7 @@ using AForge.Video.DirectShow;
 
 namespace InstantReplayApp
 {
-    internal class LiveInputManager
+    public class LiveInputManager
     {
         #region Variables privées 
         private MainManager _mainManager;
@@ -19,7 +19,7 @@ namespace InstantReplayApp
         private VideoCaptureDevice _videoCaptureDevice;
         private Size _thumbnailSize;
 
-        private const int RATIO = 4;
+        private const int RATIO = 3;
         #endregion
 
         #region Getter / Setter publiques

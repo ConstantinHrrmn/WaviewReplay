@@ -52,6 +52,8 @@
             this.tbxCommand = new System.Windows.Forms.TextBox();
             this.btnCut = new System.Windows.Forms.Button();
             this.tbSpeed = new System.Windows.Forms.TrackBar();
+            this.btnStartSecondWindow = new System.Windows.Forms.Button();
+            this.btnToLive = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbLive)).BeginInit();
             this.gbInputSource.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbReplay)).BeginInit();
@@ -63,7 +65,7 @@
             // 
             this.pbLive.Location = new System.Drawing.Point(17, 69);
             this.pbLive.Name = "pbLive";
-            this.pbLive.Size = new System.Drawing.Size(480, 270);
+            this.pbLive.Size = new System.Drawing.Size(640, 360);
             this.pbLive.TabIndex = 0;
             this.pbLive.TabStop = false;
             // 
@@ -72,14 +74,14 @@
             this.cmbSources.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSources.Location = new System.Drawing.Point(6, 36);
             this.cmbSources.Name = "cmbSources";
-            this.cmbSources.Size = new System.Drawing.Size(479, 32);
+            this.cmbSources.Size = new System.Drawing.Size(528, 32);
             this.cmbSources.TabIndex = 1;
             this.cmbSources.SelectedIndexChanged += new System.EventHandler(this.cmbSources_SelectedIndexChanged);
             // 
             // btnCloseLiveInput
             // 
             this.btnCloseLiveInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCloseLiveInput.Location = new System.Drawing.Point(500, 27);
+            this.btnCloseLiveInput.Location = new System.Drawing.Point(540, 27);
             this.btnCloseLiveInput.Name = "btnCloseLiveInput";
             this.btnCloseLiveInput.Size = new System.Drawing.Size(94, 49);
             this.btnCloseLiveInput.TabIndex = 3;
@@ -113,14 +115,14 @@
             this.gbInputSource.Controls.Add(this.btnCloseLiveInput);
             this.gbInputSource.Location = new System.Drawing.Point(17, 435);
             this.gbInputSource.Name = "gbInputSource";
-            this.gbInputSource.Size = new System.Drawing.Size(600, 82);
+            this.gbInputSource.Size = new System.Drawing.Size(640, 82);
             this.gbInputSource.TabIndex = 6;
             this.gbInputSource.TabStop = false;
             this.gbInputSource.Text = "Input Source";
             // 
             // pbReplay
             // 
-            this.pbReplay.Location = new System.Drawing.Point(788, 69);
+            this.pbReplay.Location = new System.Drawing.Point(663, 67);
             this.pbReplay.Name = "pbReplay";
             this.pbReplay.Size = new System.Drawing.Size(640, 360);
             this.pbReplay.TabIndex = 7;
@@ -129,7 +131,7 @@
             // btnCreateVideo
             // 
             this.btnCreateVideo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCreateVideo.Location = new System.Drawing.Point(1661, 832);
+            this.btnCreateVideo.Location = new System.Drawing.Point(1080, 827);
             this.btnCreateVideo.Name = "btnCreateVideo";
             this.btnCreateVideo.Size = new System.Drawing.Size(223, 49);
             this.btnCreateVideo.TabIndex = 8;
@@ -161,7 +163,7 @@
             // btnStartBuffer
             // 
             this.btnStartBuffer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStartBuffer.Location = new System.Drawing.Point(1661, 12);
+            this.btnStartBuffer.Location = new System.Drawing.Point(1080, 717);
             this.btnStartBuffer.Name = "btnStartBuffer";
             this.btnStartBuffer.Size = new System.Drawing.Size(223, 49);
             this.btnStartBuffer.TabIndex = 11;
@@ -172,7 +174,7 @@
             // btnOut
             // 
             this.btnOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOut.Location = new System.Drawing.Point(1432, 832);
+            this.btnOut.Location = new System.Drawing.Point(851, 827);
             this.btnOut.Name = "btnOut";
             this.btnOut.Size = new System.Drawing.Size(223, 49);
             this.btnOut.TabIndex = 12;
@@ -183,7 +185,7 @@
             // btnIn
             // 
             this.btnIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnIn.Location = new System.Drawing.Point(1203, 832);
+            this.btnIn.Location = new System.Drawing.Point(622, 827);
             this.btnIn.Name = "btnIn";
             this.btnIn.Size = new System.Drawing.Size(223, 49);
             this.btnIn.TabIndex = 13;
@@ -198,7 +200,7 @@
             // btnClearSelection
             // 
             this.btnClearSelection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClearSelection.Location = new System.Drawing.Point(974, 832);
+            this.btnClearSelection.Location = new System.Drawing.Point(393, 827);
             this.btnClearSelection.Name = "btnClearSelection";
             this.btnClearSelection.Size = new System.Drawing.Size(223, 49);
             this.btnClearSelection.TabIndex = 14;
@@ -209,7 +211,7 @@
             // lblReplay
             // 
             this.lblReplay.AutoSize = true;
-            this.lblReplay.Location = new System.Drawing.Point(969, 804);
+            this.lblReplay.Location = new System.Drawing.Point(388, 799);
             this.lblReplay.Name = "lblReplay";
             this.lblReplay.Size = new System.Drawing.Size(19, 25);
             this.lblReplay.TabIndex = 15;
@@ -223,7 +225,7 @@
             // btnBackToLive
             // 
             this.btnBackToLive.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBackToLive.Location = new System.Drawing.Point(1432, 12);
+            this.btnBackToLive.Location = new System.Drawing.Point(851, 717);
             this.btnBackToLive.Name = "btnBackToLive";
             this.btnBackToLive.Size = new System.Drawing.Size(223, 49);
             this.btnBackToLive.TabIndex = 16;
@@ -232,7 +234,7 @@
             // 
             // tbReplay
             // 
-            this.tbReplay.Location = new System.Drawing.Point(786, 435);
+            this.tbReplay.Location = new System.Drawing.Point(663, 437);
             this.tbReplay.Name = "tbReplay";
             this.tbReplay.Size = new System.Drawing.Size(640, 80);
             this.tbReplay.TabIndex = 17;
@@ -250,7 +252,7 @@
             // btnCut
             // 
             this.btnCut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCut.Location = new System.Drawing.Point(1203, 777);
+            this.btnCut.Location = new System.Drawing.Point(622, 772);
             this.btnCut.Name = "btnCut";
             this.btnCut.Size = new System.Drawing.Size(681, 49);
             this.btnCut.TabIndex = 19;
@@ -260,19 +262,45 @@
             // 
             // tbSpeed
             // 
-            this.tbSpeed.Location = new System.Drawing.Point(786, 503);
+            this.tbSpeed.Location = new System.Drawing.Point(663, 495);
             this.tbSpeed.Maximum = 100;
             this.tbSpeed.Minimum = 1;
             this.tbSpeed.Name = "tbSpeed";
             this.tbSpeed.Size = new System.Drawing.Size(640, 80);
             this.tbSpeed.TabIndex = 20;
-            this.tbSpeed.Value = 1;
+            this.tbSpeed.TickFrequency = 10;
+            this.tbSpeed.Value = 100;
+            this.tbSpeed.Scroll += new System.EventHandler(this.tbSpeed_Scroll);
+            // 
+            // btnStartSecondWindow
+            // 
+            this.btnStartSecondWindow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStartSecondWindow.Location = new System.Drawing.Point(622, 717);
+            this.btnStartSecondWindow.Name = "btnStartSecondWindow";
+            this.btnStartSecondWindow.Size = new System.Drawing.Size(223, 49);
+            this.btnStartSecondWindow.TabIndex = 21;
+            this.btnStartSecondWindow.Text = "Start 2nd Window";
+            this.btnStartSecondWindow.UseVisualStyleBackColor = true;
+            this.btnStartSecondWindow.Click += new System.EventHandler(this.btnStartSecondWindow_Click);
+            // 
+            // btnToLive
+            // 
+            this.btnToLive.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnToLive.Location = new System.Drawing.Point(393, 717);
+            this.btnToLive.Name = "btnToLive";
+            this.btnToLive.Size = new System.Drawing.Size(223, 49);
+            this.btnToLive.TabIndex = 22;
+            this.btnToLive.Text = "SEND REPLAY LIVE";
+            this.btnToLive.UseVisualStyleBackColor = true;
+            this.btnToLive.Click += new System.EventHandler(this.btnToLive_Click);
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1896, 886);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(168F, 168F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.ClientSize = new System.Drawing.Size(1314, 886);
+            this.Controls.Add(this.btnToLive);
+            this.Controls.Add(this.btnStartSecondWindow);
             this.Controls.Add(this.tbSpeed);
             this.Controls.Add(this.btnCut);
             this.Controls.Add(this.tbxCommand);
@@ -334,6 +362,8 @@
         private System.Windows.Forms.TextBox tbxCommand;
         private System.Windows.Forms.Button btnCut;
         private System.Windows.Forms.TrackBar tbSpeed;
+        private System.Windows.Forms.Button btnStartSecondWindow;
+        private System.Windows.Forms.Button btnToLive;
     }
 }
 

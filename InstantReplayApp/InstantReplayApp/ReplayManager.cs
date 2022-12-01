@@ -15,7 +15,7 @@ using System.Diagnostics;
 
 namespace InstantReplayApp
 {
-    internal class ReplayManager
+    public class ReplayManager
     {
         #region Variables privées
         private Buffer _buffer;
@@ -25,6 +25,9 @@ namespace InstantReplayApp
         private bool _isReplayLive;
         private List<Bitmap> _selection = new List<Bitmap>();
         private List<Bitmap> _toDisplay = new List<Bitmap>();
+        private int _playBackFPS;
+
+        public const int DEFAULT_PLAYBACK_FPS = 25;
         #endregion
 
         #region Getter / Setter publiques
@@ -36,12 +39,24 @@ namespace InstantReplayApp
         public string SavePath { get => _savePath; set => _savePath = value; }
         public List<Bitmap> Selection { get => _selection; set => _selection = value; }
         public List<Bitmap> ToDisplay { get => _toDisplay; set => _toDisplay = value; }
+        public int PlayBackFPS { 
+            get => _playBackFPS;
+            set
+            {
+                if (value <= 0)
+                    value = 1;
+
+                _playBackFPS = value;
+            }
+        }
         #endregion
 
         public ReplayManager(MainManager a_mainManager)
         {
             this.Buffer = new Buffer();
             this.MainManager = a_mainManager;
+
+            this.PlayBackFPS = DEFAULT_PLAYBACK_FPS;
         }
 
        
@@ -153,6 +168,18 @@ namespace InstantReplayApp
         {
             this.ToDisplay = new List<Bitmap>(this.Selection);
         }
-        
+
+        public int GetIntervalBasedOnFPS()
+        {
+            return (int)(1 / (this.PlayBackFPS * 0.001));
+        }
+
+        public int SetIntervalFPS(int pourcentage)
+        {
+            int newFPS = (int)((double)(pourcentage / 100.0) * (double)DEFAULT_PLAYBACK_FPS);
+            this.PlayBackFPS = newFPS;
+            return GetIntervalBasedOnFPS();
+        }
+
     }
 }

@@ -26,8 +26,13 @@ namespace InstantReplayApp
         private List<Bitmap> _selection = new List<Bitmap>();
         private List<Bitmap> _toDisplay = new List<Bitmap>();
         private int _playBackFPS;
+        private int _playbackPourcentage;
 
         public const int DEFAULT_PLAYBACK_FPS = 25;
+        public const int DEFAULT_PLAYBACK_POURCENTAGE = 100;
+
+        public const int MIN_POURCENTAGE = 0;
+        public const int MAX_POURCENTAGE = 400;
         #endregion
 
         #region Getter / Setter publiques
@@ -49,6 +54,19 @@ namespace InstantReplayApp
                 _playBackFPS = value;
             }
         }
+        public int PlaybackPourcentage { 
+            get => _playbackPourcentage;
+            set
+            {
+                if (value < MIN_POURCENTAGE)
+                    value = MIN_POURCENTAGE;
+
+                if (value > MAX_POURCENTAGE)
+                    value = MAX_POURCENTAGE;
+
+                _playbackPourcentage = value;
+            }
+        }
         #endregion
 
         public ReplayManager(MainManager a_mainManager)
@@ -57,6 +75,7 @@ namespace InstantReplayApp
             this.MainManager = a_mainManager;
 
             this.PlayBackFPS = DEFAULT_PLAYBACK_FPS;
+            this.PlaybackPourcentage = DEFAULT_PLAYBACK_POURCENTAGE;
         }
 
        
@@ -73,9 +92,9 @@ namespace InstantReplayApp
                 string path = Path.Combine(this.SavePath, "replay_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".avi");
 
                 // create new video file
-                writer.Open(path, 1920, 1080, 25, VideoCodec.MPEG4);
+                writer.Open(path, 1920, 1080, this.PlayBackFPS, VideoCodec.MPEG4);
 
-                foreach (Bitmap item in this.Buffer.Images)
+                foreach (Bitmap item in this.ToDisplay)
                     writer.WriteVideoFrame(item);
 
                 writer.Close();
@@ -169,16 +188,42 @@ namespace InstantReplayApp
             this.ToDisplay = new List<Bitmap>(this.Selection);
         }
 
+        /// <summary>
+        /// Convert FPS to MS interval (One frame per X milliseconds)
+        /// </summary>
+        /// <returns>l'interval</returns>
         public int GetIntervalBasedOnFPS()
         {
             return (int)(1 / (this.PlayBackFPS * 0.001));
         }
 
+        /// <summary>
+        /// Convertir un pourcentage de vitesse en FPS
+        /// </summary>
+        /// <param name="pourcentage">le pourcentage de la vitesse</param>
+        /// <returns>L'interval en MS pour chaque frame</returns>
         public int SetIntervalFPS(int pourcentage)
         {
-            int newFPS = (int)((double)(pourcentage / 100.0) * (double)DEFAULT_PLAYBACK_FPS);
+            this.PlaybackPourcentage = pourcentage;
+            int newFPS = (int)((double)(this.PlaybackPourcentage / 100.0) * (double)DEFAULT_PLAYBACK_FPS);
             this.PlayBackFPS = newFPS;
             return GetIntervalBasedOnFPS();
+        }
+
+        /// <summary>
+        /// Remet les FPS d'affichage à la valeur par défaut
+        /// </summary>
+        public void ResetFPS()
+        {
+            this.PlayBackFPS = DEFAULT_PLAYBACK_FPS;
+        }
+
+        /// <summary>
+        /// Remet à 0 la vitesse de playback
+        /// </summary>
+        public void ResetPourcentage()
+        {
+            this.PlaybackPourcentage = DEFAULT_PLAYBACK_POURCENTAGE;
         }
 
     }

@@ -19,6 +19,8 @@ namespace InstantReplayApp
         private LiveInputManager _liveInputManager;
         private ReplayManager _replayManager;
 
+        private int _intervalFPS = ReplayManager.DEFAULT_PLAYBACK_POURCENTAGE;
+
         private const int DEFAULT_REPLAY_INDEX = 0;
         private int _replayIndex = DEFAULT_REPLAY_INDEX;
         #endregion
@@ -28,6 +30,7 @@ namespace InstantReplayApp
         internal LiveInputManager LiveInputManager { get => _liveInputManager; set => _liveInputManager = value; }
         internal ReplayManager ReplayManager { get => _replayManager; set => _replayManager = value; }
         public DisplayReplay FrmReplay { get => _frmReplay; set => _frmReplay = value; }
+        public int IntervalPourcentage { get => _intervalFPS; set => _intervalFPS = value; }
         #endregion
 
         /// <summary>
@@ -153,6 +156,7 @@ namespace InstantReplayApp
             this.ReplayManager.StartBuffer();
         }
 
+        #region VIDEO CONTROL
         /// <summary>
         /// Un marquage out à été notifié
         /// </summary>
@@ -175,6 +179,9 @@ namespace InstantReplayApp
             this.StreamReplay();
         }
 
+        /// <summary>
+        /// Un marquage OUT à été notifié
+        /// </summary>
         public void Out()
         {
             this.FrmMain.StopReplayTimer();
@@ -185,23 +192,34 @@ namespace InstantReplayApp
             this.StreamReplay();
         }
 
-        public void SecondsInBuffer()
-        {
-            this.FrmMain.UpdateBufferButton(this.ReplayManager.Buffer.SecondsInBuffer().ToString());
-        }
-
+        /// <summary>
+        /// Réinitialiser la sélection faite dans le replay
+        /// </summary>
         public void ClearSelection()
         {
             this.ReplayManager.ClearSelection();
             this.FrmMain.UpdateTrackBarReplayMaximum(this.ReplayManager.ToDisplay.Count);
         }
 
+        /// <summary>
+        /// Permet de mettre a jour l'affichage de la frame du replay en fonction de son index
+        /// </summary>
+        /// <param name="index">l'index de la frame sélectionnée</param>
         public void ChangeReplayPosition(int index)
         {
             if (index >= 0 && index < this.ReplayManager.ToDisplay.Count)
             {
                 this._replayIndex = index;
             }
+        }
+        #endregion
+
+        /// <summary>
+        /// Permet de mettre a jour le boutton sur la forme avec le nombre de secondes qui sont enregistrées dans le buffer
+        /// </summary>
+        public void SecondsInBuffer()
+        {
+            this.FrmMain.UpdateBufferButton(this.ReplayManager.Buffer.SecondsInBuffer().ToString());
         }
 
         /// <summary>
@@ -214,15 +232,20 @@ namespace InstantReplayApp
             this.FrmMain.SetReplayTimerInterval(interval);
             this.FrmMain.StartReplayTimer();
             this.FrmMain.UpdateTrackBarReplayMaximum(this.ReplayManager.ToDisplay.Count);
+            this.FrmMain.UpdateReplaySpeedTrackbar(ReplayManager.MIN_POURCENTAGE, ReplayManager.MAX_POURCENTAGE, ReplayManager.DEFAULT_PLAYBACK_POURCENTAGE);
         }
 
-        
-
+        /// <summary>
+        /// Remet les FPS du replay manager à la valeur par défaut
+        /// </summary>
         public void ResetPlayBackFPS()
         {
-            this.ReplayManager.PlayBackFPS = ReplayManager.DEFAULT_PLAYBACK_FPS;
+            this.ReplayManager.ResetFPS();
         }
 
+        /// <summary>
+        /// Ce produit a chaque tick d'un timer
+        /// </summary>
         public void StreamReplayIntervalTick()
         {
             this.DisplayReplayImage(this.ReplayManager.ToDisplay[this._replayIndex]);
@@ -235,27 +258,50 @@ namespace InstantReplayApp
             GC.Collect();
         }
 
+        public void SlowDown(int amount)
+        {
+            this.ReplayManager.PlaybackPourcentage -= amount;
+        }
 
+        public void SpeedUp(int amount)
+        {
+            this.ReplayManager.PlaybackPourcentage += amount;
+        }
+
+        public int SetInterval()
+        {
+            return this.ReplayManager.SetIntervalFPS(this.ReplayManager.PlaybackPourcentage);
+        }
         #endregion
 
         #region Replay Display
 
+        /// <summary>
+        /// Création de la fenètre sur le second moniteur
+        /// </summary>
         public void NewDisplay()
-        {
+        {            
             this.FrmReplay = new DisplayReplay(this.ReplayManager);
             this.FrmReplay.Show();
-            TaskBar.Show();
         }
 
+        /// <summary>
+        /// Fermer la fen^tre de replay
+        /// </summary>
         public void CloseDisplay()
         {
             this.FrmReplay.Close();
         }
 
+        /// <summary>
+        /// Afficher la vidéo en cache dans la fenêtre de Replay
+        /// </summary>
         public void GoLiveReplay()
         {
             this.FrmReplay.StartLive();
         }
+
+        
         #endregion
     }
 }

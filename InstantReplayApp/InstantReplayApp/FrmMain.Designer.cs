@@ -46,10 +46,14 @@
             this.lblSpeedPourcentage = new System.Windows.Forms.Label();
             this.lblSecondsInBuffer = new System.Windows.Forms.Label();
             this.lblLiveEnds = new System.Windows.Forms.Label();
+            this.lblBufferWarning = new System.Windows.Forms.Label();
+            this.lblLiveWarning = new System.Windows.Forms.Label();
+            this.pbLiveReplay = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbLive)).BeginInit();
             this.gbInputSource.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbReplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbReplay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLiveReplay)).BeginInit();
             this.SuspendLayout();
             // 
             // pbLive
@@ -64,9 +68,9 @@
             // cmbSources
             // 
             this.cmbSources.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSources.Location = new System.Drawing.Point(6, 36);
+            this.cmbSources.Location = new System.Drawing.Point(6, 29);
             this.cmbSources.Name = "cmbSources";
-            this.cmbSources.Size = new System.Drawing.Size(528, 32);
+            this.cmbSources.Size = new System.Drawing.Size(363, 32);
             this.cmbSources.TabIndex = 1;
             this.cmbSources.SelectedIndexChanged += new System.EventHandler(this.cmbSources_SelectedIndexChanged);
             // 
@@ -75,7 +79,7 @@
             this.btnCloseLiveInput.BackColor = System.Drawing.Color.Black;
             this.btnCloseLiveInput.Enabled = false;
             this.btnCloseLiveInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCloseLiveInput.Location = new System.Drawing.Point(540, 27);
+            this.btnCloseLiveInput.Location = new System.Drawing.Point(375, 20);
             this.btnCloseLiveInput.Name = "btnCloseLiveInput";
             this.btnCloseLiveInput.Size = new System.Drawing.Size(94, 49);
             this.btnCloseLiveInput.TabIndex = 3;
@@ -87,7 +91,7 @@
             // 
             this.lblInputResolution.AutoSize = true;
             this.lblInputResolution.ForeColor = System.Drawing.Color.White;
-            this.lblInputResolution.Location = new System.Drawing.Point(18, 476);
+            this.lblInputResolution.Location = new System.Drawing.Point(1309, 47);
             this.lblInputResolution.Name = "lblInputResolution";
             this.lblInputResolution.Size = new System.Drawing.Size(206, 25);
             this.lblInputResolution.TabIndex = 4;
@@ -98,7 +102,7 @@
             // 
             this.lblDisplayResolution.AutoSize = true;
             this.lblDisplayResolution.ForeColor = System.Drawing.Color.White;
-            this.lblDisplayResolution.Location = new System.Drawing.Point(658, 476);
+            this.lblDisplayResolution.Location = new System.Drawing.Point(1309, 20);
             this.lblDisplayResolution.Name = "lblDisplayResolution";
             this.lblDisplayResolution.Size = new System.Drawing.Size(227, 25);
             this.lblDisplayResolution.TabIndex = 5;
@@ -113,7 +117,7 @@
             this.gbInputSource.ForeColor = System.Drawing.Color.Red;
             this.gbInputSource.Location = new System.Drawing.Point(17, 12);
             this.gbInputSource.Name = "gbInputSource";
-            this.gbInputSource.Size = new System.Drawing.Size(640, 82);
+            this.gbInputSource.Size = new System.Drawing.Size(475, 82);
             this.gbInputSource.TabIndex = 6;
             this.gbInputSource.TabStop = false;
             this.gbInputSource.Text = "Input Source";
@@ -130,9 +134,9 @@
             // btnSetSavePath
             // 
             this.btnSetSavePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSetSavePath.Location = new System.Drawing.Point(12, 825);
+            this.btnSetSavePath.Location = new System.Drawing.Point(498, 32);
             this.btnSetSavePath.Name = "btnSetSavePath";
-            this.btnSetSavePath.Size = new System.Drawing.Size(223, 49);
+            this.btnSetSavePath.Size = new System.Drawing.Size(159, 49);
             this.btnSetSavePath.TabIndex = 9;
             this.btnSetSavePath.Text = "Set Save Path";
             this.btnSetSavePath.UseVisualStyleBackColor = true;
@@ -146,7 +150,7 @@
             // 
             this.lblReplay.AutoSize = true;
             this.lblReplay.ForeColor = System.Drawing.Color.White;
-            this.lblReplay.Location = new System.Drawing.Point(1590, 113);
+            this.lblReplay.Location = new System.Drawing.Point(1309, 77);
             this.lblReplay.Name = "lblReplay";
             this.lblReplay.Size = new System.Drawing.Size(128, 25);
             this.lblReplay.TabIndex = 15;
@@ -171,9 +175,9 @@
             // 
             // tbxCommand
             // 
-            this.tbxCommand.BackColor = System.Drawing.Color.Black;
+            this.tbxCommand.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.tbxCommand.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbxCommand.Location = new System.Drawing.Point(1380, 32);
+            this.tbxCommand.Location = new System.Drawing.Point(1663, 32);
             this.tbxCommand.Name = "tbxCommand";
             this.tbxCommand.Size = new System.Drawing.Size(100, 22);
             this.tbxCommand.TabIndex = 18;
@@ -182,45 +186,80 @@
             // 
             // lblSpeedPourcentage
             // 
-            this.lblSpeedPourcentage.AutoSize = true;
+            this.lblSpeedPourcentage.Font = new System.Drawing.Font("Arial", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSpeedPourcentage.ForeColor = System.Drawing.Color.White;
-            this.lblSpeedPourcentage.Location = new System.Drawing.Point(1590, 148);
+            this.lblSpeedPourcentage.Location = new System.Drawing.Point(1001, 476);
             this.lblSpeedPourcentage.Name = "lblSpeedPourcentage";
-            this.lblSpeedPourcentage.Size = new System.Drawing.Size(137, 25);
+            this.lblSpeedPourcentage.Size = new System.Drawing.Size(302, 98);
             this.lblSpeedPourcentage.TabIndex = 25;
-            this.lblSpeedPourcentage.Text = "Speed : 000%";
+            this.lblSpeedPourcentage.Text = "000%";
             this.lblSpeedPourcentage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblSecondsInBuffer
             // 
             this.lblSecondsInBuffer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.lblSecondsInBuffer.ForeColor = System.Drawing.Color.Black;
-            this.lblSecondsInBuffer.Location = new System.Drawing.Point(1309, 439);
+            this.lblSecondsInBuffer.Location = new System.Drawing.Point(1563, 72);
             this.lblSecondsInBuffer.Name = "lblSecondsInBuffer";
-            this.lblSecondsInBuffer.Size = new System.Drawing.Size(275, 34);
+            this.lblSecondsInBuffer.Size = new System.Drawing.Size(66, 34);
             this.lblSecondsInBuffer.TabIndex = 26;
-            this.lblSecondsInBuffer.Text = "Buffer : 0,00 (sec)";
+            this.lblSecondsInBuffer.Text = "0,00";
             this.lblSecondsInBuffer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblLiveEnds
             // 
-            this.lblLiveEnds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblLiveEnds.BackColor = System.Drawing.Color.Green;
             this.lblLiveEnds.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.lblLiveEnds.Font = new System.Drawing.Font("Arial Narrow", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLiveEnds.ForeColor = System.Drawing.Color.White;
             this.lblLiveEnds.Location = new System.Drawing.Point(1309, 113);
             this.lblLiveEnds.Name = "lblLiveEnds";
-            this.lblLiveEnds.Size = new System.Drawing.Size(275, 309);
+            this.lblLiveEnds.Size = new System.Drawing.Size(320, 168);
             this.lblLiveEnds.TabIndex = 27;
             this.lblLiveEnds.Text = "0.00";
             this.lblLiveEnds.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblBufferWarning
+            // 
+            this.lblBufferWarning.AutoSize = true;
+            this.lblBufferWarning.Font = new System.Drawing.Font("Arial Black", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBufferWarning.ForeColor = System.Drawing.Color.Red;
+            this.lblBufferWarning.Location = new System.Drawing.Point(709, 261);
+            this.lblBufferWarning.Name = "lblBufferWarning";
+            this.lblBufferWarning.Size = new System.Drawing.Size(554, 59);
+            this.lblBufferWarning.TabIndex = 28;
+            this.lblBufferWarning.Text = "BUFFER NOT STARTED";
+            // 
+            // lblLiveWarning
+            // 
+            this.lblLiveWarning.AutoSize = true;
+            this.lblLiveWarning.Font = new System.Drawing.Font("Arial Black", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLiveWarning.ForeColor = System.Drawing.Color.Red;
+            this.lblLiveWarning.Location = new System.Drawing.Point(66, 261);
+            this.lblLiveWarning.Name = "lblLiveWarning";
+            this.lblLiveWarning.Size = new System.Drawing.Size(513, 59);
+            this.lblLiveWarning.TabIndex = 29;
+            this.lblLiveWarning.Text = "NO INPUT SELECTED";
+            // 
+            // pbLiveReplay
+            // 
+            this.pbLiveReplay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbLiveReplay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbLiveReplay.Location = new System.Drawing.Point(1309, 293);
+            this.pbLiveReplay.Name = "pbLiveReplay";
+            this.pbLiveReplay.Size = new System.Drawing.Size(320, 180);
+            this.pbLiveReplay.TabIndex = 30;
+            this.pbLiveReplay.TabStop = false;
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(168F, 168F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1776, 886);
+            this.ClientSize = new System.Drawing.Size(1643, 585);
+            this.Controls.Add(this.pbLiveReplay);
+            this.Controls.Add(this.lblLiveWarning);
+            this.Controls.Add(this.lblBufferWarning);
             this.Controls.Add(this.lblLiveEnds);
             this.Controls.Add(this.lblSecondsInBuffer);
             this.Controls.Add(this.lblSpeedPourcentage);
@@ -247,6 +286,7 @@
             this.gbInputSource.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbReplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbReplay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLiveReplay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -271,6 +311,9 @@
         private System.Windows.Forms.Label lblSpeedPourcentage;
         private System.Windows.Forms.Label lblSecondsInBuffer;
         private System.Windows.Forms.Label lblLiveEnds;
+        private System.Windows.Forms.Label lblBufferWarning;
+        private System.Windows.Forms.Label lblLiveWarning;
+        private System.Windows.Forms.PictureBox pbLiveReplay;
     }
 }
 

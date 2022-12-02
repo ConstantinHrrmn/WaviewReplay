@@ -43,7 +43,7 @@ namespace InstantReplayApp
             if (this.CurrentFrame >= this.Replay.ToDisplay.Count)
             {
                 this.Form.StopReplayTimer();
-                this.ResetCurrentFrame();
+                this.Form.DisplayImage(null);
             }
         }
     }

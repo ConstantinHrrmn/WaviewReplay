@@ -57,7 +57,7 @@ namespace InstantReplayApp
             this.ReplayManager = new ReplayManager(this);
 
             this.ReplayManager.IsReplayLive = true;
-            this.FrmReplay = new DisplayReplay(this.ReplayManager);
+            this.FrmReplay = new DisplayReplay(this);
         }
 
 
@@ -146,6 +146,10 @@ namespace InstantReplayApp
         public void SetSavePath(string path)
         {
             this.ReplayManager.SetSavePath(path);
+            if (path != null)
+                this.FrmMain.UpdateSavePathLabel("Save path OK");
+            else
+                this.FrmMain.UpdateSavePathLabel("Select path");
         }
 
         /// <summary>
@@ -164,6 +168,8 @@ namespace InstantReplayApp
         {
             this.ReplayManager.Cut();
             this.StreamReplay();
+            this.FrmMain.UpdatePourcentageSpeed();
+            this.ReplayTick(0);
         }
 
         /// <summary>
@@ -177,6 +183,7 @@ namespace InstantReplayApp
             this._replayIndex = DEFAULT_REPLAY_INDEX;
 
             this.StreamReplay();
+            this.ReplayTick(0);
         }
 
         /// <summary>
@@ -190,6 +197,7 @@ namespace InstantReplayApp
             this._replayIndex = DEFAULT_REPLAY_INDEX;
 
             this.StreamReplay();
+            this.ReplayTick(0);
         }
 
         /// <summary>
@@ -270,7 +278,9 @@ namespace InstantReplayApp
 
         public int SetInterval()
         {
-            return this.ReplayManager.SetIntervalFPS(this.ReplayManager.PlaybackPourcentage);
+            int interval = this.ReplayManager.SetIntervalFPS(this.ReplayManager.PlaybackPourcentage);
+            this.ReplayTick(0);
+            return interval;
         }
         #endregion
 
@@ -281,7 +291,7 @@ namespace InstantReplayApp
         /// </summary>
         public void NewDisplay()
         {            
-            this.FrmReplay = new DisplayReplay(this.ReplayManager);
+            this.FrmReplay = new DisplayReplay(this);
             this.FrmReplay.Show();
         }
 
@@ -301,7 +311,23 @@ namespace InstantReplayApp
             this.FrmReplay.StartLive();
         }
 
-        
+        public void ReplayTick(int currentFrame)
+        {
+            this.FrmMain.UpdateLiveTimeLeft(this.ReplayManager.TimeLeftLive(currentFrame));
+        }
+
+        public void DisplayLittleReplayImage(Bitmap bmp)
+        {
+            if (bmp != null)
+            {
+                Bitmap resized = new Bitmap(bmp, new Size(320, 180));
+                this.FrmMain.DisplayLittleLive(resized);
+            }else
+                this.FrmMain.DisplayLittleLive(null);
+
+        }
+
+
         #endregion
     }
 }

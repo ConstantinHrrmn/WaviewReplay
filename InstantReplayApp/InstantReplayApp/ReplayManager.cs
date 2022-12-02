@@ -165,6 +165,11 @@ namespace InstantReplayApp
             this.ToDisplay = new List<Bitmap>(this.ToDisplay.GetRange(0, endFrame));
         }
 
+        public float TimeLeftLive(int index)
+        {
+            return (float)(this.ToDisplay.Count - index) / (float)this.PlayBackFPS;
+        }
+
         public void Cut()
         {
             this.Selection = new List<Bitmap>(this.Buffer.Images);

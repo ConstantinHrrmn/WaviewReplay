@@ -13,13 +13,16 @@ namespace InstantReplayApp
     public partial class DisplayReplay : Form
     {
         private ReplayController _rC;
+        private MainManager _mM;
 
         public ReplayController RC { get => _rC; set => _rC = value; }
-        
-        public DisplayReplay(ReplayManager a_rm)
+        public MainManager MM { get => _mM; set => _mM = value; }
+
+        public DisplayReplay(MainManager mm)
         {
             InitializeComponent();
-            this.RC = new ReplayController(this, a_rm);
+            this.RC = new ReplayController(this, mm.ReplayManager);
+            this.MM = mm;
         }
 
         private void DisplayReplay_Load(object sender, EventArgs e)
@@ -38,6 +41,7 @@ namespace InstantReplayApp
         public void DisplayImage(Bitmap Image)
         {
             this.pbReplayFull.Image = Image;
+            this.MM.DisplayLittleReplayImage(Image);
         }
 
         public void StartReplayTimer()
@@ -53,11 +57,18 @@ namespace InstantReplayApp
         public void SetReplayTimerInterval(int interval)
         {
             this.replayLive.Interval = interval;
+            this.lblDebug.Text = interval.ToString();
         }
 
         private void replayLive_Tick(object sender, EventArgs e)
         {
             this.RC.Tick();
+            this.SendTickToMainManager();
+        }
+
+        public void SendTickToMainManager()
+        {
+            this.MM.ReplayTick(this.RC.CurrentFrame);
         }
     }
 }

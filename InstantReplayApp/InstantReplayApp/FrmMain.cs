@@ -34,6 +34,11 @@ namespace InstantReplayApp
             this.LoadInputList();
         }
 
+        public void UpdateSavePathLabel(string text)
+        {
+            this.btnSetSavePath.Text = text;
+        }
+
         #region Camera Selection
         public void LoadInputList()
         {
@@ -49,6 +54,7 @@ namespace InstantReplayApp
         private void cmbSources_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.MainManager.StartStream(this.cmbSources.SelectedIndex);
+            this.ChangeLiveWarningVisibility();
             this.btnCloseLiveInput.Enabled = true;
             this.tbxCommand.Focus();
             this.Focus();
@@ -260,6 +266,7 @@ namespace InstantReplayApp
             {
                 this.BufferTimer.Start();
                 this.MainManager.StartBuffer();
+                this.ChangeBufferWarningVisibility();
             }
             else
             {
@@ -294,7 +301,7 @@ namespace InstantReplayApp
         }
         
         public void UpdatePourcentageSpeed(){
-            this.lblSpeedPourcentage.Text = "Speed: " + this.MainManager.ReplayManager.PlaybackPourcentage + "%";
+            this.lblSpeedPourcentage.Text = this.MainManager.ReplayManager.PlaybackPourcentage + "%";
         }
 
         private void Cut()
@@ -313,7 +320,7 @@ namespace InstantReplayApp
 
         public void UpdateBufferButton(string text)
         {
-            this.lblSecondsInBuffer.Invoke((MethodInvoker)(() => this.lblSecondsInBuffer.Text = "Buffer : " + text + " (sec)"));
+            this.lblSecondsInBuffer.Invoke((MethodInvoker)(() => this.lblSecondsInBuffer.Text = text));
         }
 
         private void tbReplay_Scroll(object sender, EventArgs e)
@@ -329,6 +336,11 @@ namespace InstantReplayApp
         private void Play()
         {
             this.StartReplayTimer();
+        }
+
+        public void DisplayLittleLive(Bitmap Image)
+        {
+            this.pbLiveReplay.Invoke((MethodInvoker)(() => this.pbLiveReplay.Image = Image));
         }
 
         #endregion
@@ -347,10 +359,37 @@ namespace InstantReplayApp
             this.MainManager.GoLiveReplay();
         }
 
-
-
         #endregion
 
+        #region Update Labels
+
+        public void UpdateLiveTimeLeft(float timeLeft)
+        {
+            this.lblLiveEnds.Invoke((MethodInvoker)(() => this.lblLiveEnds.Text = timeLeft.ToString("0.00")));
+            this.lblLiveEnds.BackColor = (timeLeft > 0) ? Color.Red : Color.Green;
+        }
+
+        public void UpdateBufferWarningLabel(string text)
+        {
+            this.lblBufferWarning.Invoke((MethodInvoker)(() => this.lblBufferWarning.Text = text));
+        }
+
+        public void ChangeBufferWarningVisibility()
+        {
+            this.lblBufferWarning.Invoke((MethodInvoker)(() => this.lblBufferWarning.Visible = !this.lblBufferWarning.Visible));
+        }
+
+        public void UpdateLiveWarning(string text)
+        {
+            this.lblLiveWarning.Invoke((MethodInvoker)(() => this.lblLiveWarning.Text = text));
+        }
+
+        public void ChangeLiveWarningVisibility()
+        {
+            this.lblLiveWarning.Invoke((MethodInvoker)(() => this.lblLiveWarning.Visible = !this.lblLiveWarning.Visible));
+        }
+
+        #endregion
 
     }
 }

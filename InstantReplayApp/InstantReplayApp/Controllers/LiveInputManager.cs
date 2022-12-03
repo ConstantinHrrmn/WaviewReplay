@@ -19,12 +19,14 @@ namespace InstantReplayApp
         private VideoCaptureDevice _videoCaptureDevice;
         private Size _thumbnailSize;
 
-        private const int RATIO = 3;
+        //private const int RATIO = 3;
         #endregion
 
         #region Getter / Setter publiques
-        public Size ThumbnailSize { get => _thumbnailSize; set => _thumbnailSize = value; }
+        public Size LiveSize { get => _thumbnailSize; set => _thumbnailSize = value; }
         public MainManager MainManager { get => _mainManager; set => _mainManager = value; }
+        public FilterInfoCollection FilterInfoCollection { get => _filterInfoCollection; set => _filterInfoCollection = value; }
+        public VideoCaptureDevice VideoCaptureDevice { get => _videoCaptureDevice; set => _videoCaptureDevice = value; }
 
         #endregion
 
@@ -35,7 +37,7 @@ namespace InstantReplayApp
         public LiveInputManager(MainManager a_mainManager)
         {
             this.MainManager = a_mainManager;
-            this._videoCaptureDevice = new VideoCaptureDevice();       
+            this.VideoCaptureDevice = new VideoCaptureDevice();       
         }
 
         /// <summary>
@@ -44,8 +46,8 @@ namespace InstantReplayApp
         /// <returns>La liste de toutes les caméras</returns>
         public FilterInfoCollection LoadInputList()
         {
-            this._filterInfoCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-            return this._filterInfoCollection;
+            this.FilterInfoCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            return this.FilterInfoCollection;
         }
 
         /// <summary>
@@ -58,19 +60,18 @@ namespace InstantReplayApp
             this.StopStream();
 
             // Création d'une nouvelle capture vidéo
-            this._videoCaptureDevice = new VideoCaptureDevice(this._filterInfoCollection[selectedInputIndex].MonikerString);
-            this._videoCaptureDevice.NewFrame += videoCaptureDevice_NewFrame;
+            this.VideoCaptureDevice = new VideoCaptureDevice(this.FilterInfoCollection[selectedInputIndex].MonikerString);
+            this.VideoCaptureDevice.NewFrame += videoCaptureDevice_NewFrame;
 
             // Démarrage de la nouvelle capture vidéo
-            this._videoCaptureDevice.Start();
+            this.VideoCaptureDevice.Start();
 
             // Envoie de la résolution d'entrée
-            VideoCapabilities vc = this._videoCaptureDevice.VideoCapabilities[0];
+            VideoCapabilities vc = this.VideoCaptureDevice.VideoCapabilities[0];
 
 
             Size full_resolution = vc.FrameSize;
-            Size small_resultion = new Size(full_resolution.Width / RATIO, full_resolution.Height / RATIO);
-            this.ThumbnailSize = small_resultion;
+            Size small_resultion = this.LiveSize;
 
             return (full_resolution, small_resultion, vc.MaximumFrameRate);
         }
@@ -82,8 +83,8 @@ namespace InstantReplayApp
         public void StopStream()
         {
             // Si la capture vidéo était déjà active, alors on la stop
-            if (this._videoCaptureDevice.IsRunning)
-                this._videoCaptureDevice.Stop();
+            if (this.VideoCaptureDevice.IsRunning)
+                this.VideoCaptureDevice.Stop();
         }
 
         /// <summary>
@@ -98,6 +99,8 @@ namespace InstantReplayApp
             
             // On affiche le live dans la Form principale
             this.MainManager.DisplayLiveImage(original);
+
+            //this.MainManager.DisplayImageSecondViewer(original);
 
             if (this.MainManager.IsReplayLive)
             {

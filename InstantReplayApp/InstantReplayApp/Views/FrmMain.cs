@@ -18,11 +18,14 @@ namespace InstantReplayApp
     {
         private MainManager _mainManager;
 
-        public MainManager MainManager { get => _mainManager; set => _mainManager = value; }
+        private int selectedCameraIndex = -1;
 
+        public MainManager MainManager { get => _mainManager; set => _mainManager = value; }
+        
         public FrmMain()
         {
             InitializeComponent();
+
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
@@ -53,7 +56,8 @@ namespace InstantReplayApp
 
         private void cmbSources_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.MainManager.StartStream(this.cmbSources.SelectedIndex);
+            this.selectedCameraIndex = this.cmbSources.SelectedIndex;
+            this.MainManager.StartStream(this.selectedCameraIndex);
             this.ChangeLiveWarningVisibility();
             this.btnCloseLiveInput.Enabled = true;
             this.tbxCommand.Focus();
@@ -88,6 +92,11 @@ namespace InstantReplayApp
 
             this.ChangeDisplayResolutionLabel(small_resolution);
         }
+
+        public Size GetPictureBoxResolution()
+        {
+            return this.pbLive.Size;
+        }
         #endregion
 
         #region TrackBar
@@ -101,8 +110,6 @@ namespace InstantReplayApp
             this.tbReplay.Invoke((MethodInvoker)(() => this.tbReplay.Value = value));
         }
 
-        
-        
         public void PositionTrackBarReplay()
         {
             Point newPosition = new Point();
@@ -122,6 +129,11 @@ namespace InstantReplayApp
             //this.tbSpeed.Invoke((MethodInvoker)(() => this.tbSpeed.Minimum = min));
             //this.tbSpeed.Invoke((MethodInvoker)(() => this.tbSpeed.Maximum = max));
             //this.tbSpeed.Invoke((MethodInvoker)(() => this.tbSpeed.Value = value));
+        }
+
+        private void tbReplay_Scroll(object sender, EventArgs e)
+        {
+            this.MainManager.ChangeReplayPosition(this.tbReplay.Value);
         }
         #endregion
 
@@ -184,7 +196,7 @@ namespace InstantReplayApp
         #endregion
 
         #region BUTTON CLICK
-        private void ExecuteCommand(char command)
+        public void ExecuteCommand(char command)
         {
             switch (command)
             {
@@ -233,6 +245,13 @@ namespace InstantReplayApp
                 case 'l':
                     this.Up(1);
                     break;
+                case 'n':
+                    this.ConvertTovideo();
+                    break;
+
+                case 'b':
+                    this.IsReplayLive();
+                    break;
                 default:
                     break;
             }
@@ -256,11 +275,31 @@ namespace InstantReplayApp
             this.DisplayLiveImage(null);
         }
 
+        private void pbLive_Click(object sender, EventArgs e)
+        {
+            this.MainManager.LiveDisplay = new FrmVideoDisplay("LIVE", this);
+            this.MainManager.LiveDisplay.Show();
+        }
+
+        private void pbReplay_Click(object sender, EventArgs e)
+        {
+            this.MainManager.ReplayDisplay = new FrmVideoDisplay("REPLAY", this);
+            this.MainManager.ReplayDisplay.Show();
+        }
+
+        private void btnOnScreenButtons_Click(object sender, EventArgs e)
+        {
+            FrmButtons buttons = new FrmButtons(this.MainManager);
+            buttons.Show();
+        }        
+
 
         #endregion
 
         #region Replay Commands
-        private void StartBuffer()
+
+        #region Buffer
+        public void StartBuffer()
         {
             if (this.MainManager.IsReplayLive)
             {
@@ -279,6 +318,11 @@ namespace InstantReplayApp
             this.MainManager.SecondsInBuffer();
         }
 
+        #endregion
+
+        /// <summary>
+        /// Sets the new Seped for the replay
+        /// </summary>
         public void SetSpeed()
         {
             this.StopReplayTimer();
@@ -288,59 +332,86 @@ namespace InstantReplayApp
             this.UpdatePourcentageSpeed();
         }
 
+        public void IsReplayLive()
+        {
+            this.MainManager.ChangeReplayLiveState();
+            if (this.MainManager.IsReplayLive)
+                this.StopReplayTimer();
+            else
+                this.StartReplayTimer();
+        }
+
+        /// <summary>
+        /// Set speed up by amount giver
+        /// </summary>
+        /// <param name="amount">the amount of speed in % to speed up</param>
         public void Up(int amount)
         {
             this.MainManager.SpeedUp(amount);
             this.SetSpeed();
         }
 
+        /// <summary>
+        /// Set speed down by amount giver
+        /// </summary>
+        /// <param name="amount">the amount of speed in % to slow down</param>
         public void Down(int amount)
         {
             this.MainManager.SlowDown(amount);
             this.SetSpeed();
         }
-        
-        public void UpdatePourcentageSpeed(){
-            this.lblSpeedPourcentage.Text = this.MainManager.ReplayManager.PlaybackPourcentage + "%";
-        }
 
+        /// <summary>
+        /// Get last 8 seconds to edit
+        /// </summary>
         private void Cut()
         {
             this.MainManager.Cut();
         }
 
+        /// <summary>
+        /// Make the out mark in the edit video
+        /// </summary>
         private void Out()
         {
             this.MainManager.Out();
         }
 
+        /// <summary>
+        /// Make the in mark in the edit video
+        /// </summary>
         private void In(){
             this.MainManager.In();
         }
 
-        public void UpdateBufferButton(string text)
-        {
-            this.lblSecondsInBuffer.Invoke((MethodInvoker)(() => this.lblSecondsInBuffer.Text = text));
-        }
-
-        private void tbReplay_Scroll(object sender, EventArgs e)
-        {
-            this.MainManager.ChangeReplayPosition(this.tbReplay.Value);
-        }
-
+        /// <summary>
+        /// Pause the Replay editor
+        /// </summary>
         private void Pause()
         {
             this.StopReplayTimer();
         }
 
+        /// <summary>
+        /// Play the Replay editior
+        /// </summary>
         private void Play()
         {
             this.StartReplayTimer();
         }
 
+        /// <summary>
+        /// Display an image in the little live feed
+        /// </summary>
+        /// <param name="Image">The image to display</param>
         public void DisplayLittleLive(Bitmap Image)
         {
             this.pbLiveReplay.Invoke((MethodInvoker)(() => this.pbLiveReplay.Image = Image));
+        }
+
+        public void ConvertTovideo()
+        {
+            this.MainManager.ConvertToVideo();
         }
 
         #endregion
@@ -360,7 +431,7 @@ namespace InstantReplayApp
         }
 
         #endregion
-
+        
         #region Update Labels
 
         public void UpdateLiveTimeLeft(float timeLeft)
@@ -389,7 +460,35 @@ namespace InstantReplayApp
             this.lblLiveWarning.Invoke((MethodInvoker)(() => this.lblLiveWarning.Visible = !this.lblLiveWarning.Visible));
         }
 
+        /// <summary>
+        /// Update the Label wich displays the speed of the Replay playback
+        /// </summary>
+        public void UpdatePourcentageSpeed()
+        {
+            this.lblSpeedPourcentage.Text = this.MainManager.ReplayManager.PlaybackPourcentage + "%";
+        }
+
+        /// <summary>
+        /// Update the text wich displays the amount of seconds that are stored in the buffer
+        /// </summary>
+        /// <param name="text">the text to display</param>
+        public void UpdateBufferButton(string text)
+        {
+            this.lblSecondsInBuffer.Invoke((MethodInvoker)(() => this.lblSecondsInBuffer.Text = text));
+        }
+
+        public void UpdateStatus(string text)
+        {
+            this.lblStatus.Invoke((MethodInvoker)(() => this.lblStatus.Text = text));
+        }
+
+        public void ChangeStatusColor(Color c)
+        {
+            this.lblStatus.Invoke((MethodInvoker)(() => this.lblStatus.ForeColor = c));
+        }
+
         #endregion
+        
 
     }
 }

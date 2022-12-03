@@ -27,12 +27,15 @@ namespace InstantReplayApp
         private List<Bitmap> _toDisplay = new List<Bitmap>();
         private int _playBackFPS;
         private int _playbackPourcentage;
+        private int[] _speeds;
 
         public const int DEFAULT_PLAYBACK_FPS = 25;
         public const int DEFAULT_PLAYBACK_POURCENTAGE = 100;
 
         public const int MIN_POURCENTAGE = 0;
         public const int MAX_POURCENTAGE = 400;
+
+        public static readonly int[] DEFAULT_SPEED_ARRAY = { 25, 10, 1, 1, 10, 25 };
         #endregion
 
         #region Getter / Setter publiques
@@ -67,6 +70,8 @@ namespace InstantReplayApp
                 _playbackPourcentage = value;
             }
         }
+        public int[] Speeds { get => _speeds; set => _speeds = value; }
+
         #endregion
 
         public ReplayManager(MainManager a_mainManager)
@@ -76,12 +81,71 @@ namespace InstantReplayApp
 
             this.PlayBackFPS = DEFAULT_PLAYBACK_FPS;
             this.PlaybackPourcentage = DEFAULT_PLAYBACK_POURCENTAGE;
+
+            this.Speeds = DEFAULT_SPEED_ARRAY;
         }
 
-       
+        #region Speed
+
+        /// <summary>
+        /// Changer la vitesse à un index donné
+        /// </summary>
+        /// <param name="index">l'index</param>
+        /// <param name="value">la vitesse</param>
+        public void SetSpeed(int index, int value)
+        {
+            if (index >= 0 || index < this.Speeds.Length)
+                this.Speeds[index] = value;
+        }
+
+        /// <summary>
+        /// Récupérer la vitesse à un index donné
+        /// </summary>
+        /// <param name="index">l'index</param>
+        /// <returns>La vitesse de l'index si l'index existe, 0 si non</returns>
+        public int GetSpeed(int index)
+        {
+            if (index >= 0 || index < this.Speeds.Length)
+                return this.Speeds[index];
+            else
+                return 0;
+        }
+
+        /// <summary>
+        /// Remet les vitesses par défaut
+        /// </summary>
+        public void ResetSpeed()
+        {
+            this.Speeds = DEFAULT_SPEED_ARRAY;
+        }
+
+        /// <summary>
+        /// Résupère les vitesses stockées sur le disque ou met les valeurs par défaut si elles n'existent pas
+        /// </summary>
+        public void LoadSpeedFromDisk()
+        {
+            // Check if array is stored in the settings
+            if (Properties.Settings.Default.Speeds != null)
+            {
+                // Check if array is the same size
+                if (Properties.Settings.Default.Speeds.Length == this.Speeds.Length)
+                {
+                    // Load array
+                    this.Speeds = Properties.Settings.Default.Speeds;
+                }
+            }
+            else
+            {
+                // Load default array
+                this.Speeds = DEFAULT_SPEED_ARRAY; 
+            }
+        }
+
+        #endregion
+
 
         #region Images to Video Convert
-        public void ConvertToVideo(ConvertToVideoCallback callback)
+        public void ConvertToVideo(MainManager mm)
         {
             if (this.Buffer.Images.Count > 5)
             {
@@ -94,31 +158,25 @@ namespace InstantReplayApp
                 // create new video file
                 writer.Open(path, 1920, 1080, this.PlayBackFPS, VideoCodec.MPEG4);
 
+
+                mm.Final("Process...", Color.Red);
+
                 foreach (Bitmap item in this.ToDisplay)
+                {
                     writer.WriteVideoFrame(item);
+                    
+                }
+                    
 
                 writer.Close();
                 
                 this.StartBuffer();
 
-                callback(path);
+                mm.Final("OBS Ready", Color.Green);
             }
         }
 
-        /// <summary>
-        /// Signature du callback de la fonction ConvertToVideo
-        /// </summary>
-        /// <param name="path">le chemin d'accès à la dernière vidéo créée par le replay</param>
-        public delegate void ConvertToVideoCallback(string path);
-
-        /// <summary>
-        /// Methode de callback de la fonction ConvertToVideo
-        /// </summary>
-        /// <param name="path">Le chemin complet jusqu'à la dernière vidéo</param>
-        public static void ConvertToVideoDone(string path)
-        {
-            Debug.WriteLine("Video saved at " + path);
-        }
+        
         #endregion
 
         #region Buffer
@@ -165,11 +223,19 @@ namespace InstantReplayApp
             this.ToDisplay = new List<Bitmap>(this.ToDisplay.GetRange(0, endFrame));
         }
 
+        /// <summary>
+        /// Le temps restant de diffusion live pour le replay en cours
+        /// </summary>
+        /// <param name="index">l'index de la frame actuellement affichée</param>
+        /// <returns>le temps en float (seconde)</returns>
         public float TimeLeftLive(int index)
         {
             return (float)(this.ToDisplay.Count - index) / (float)this.PlayBackFPS;
         }
 
+        /// <summary>
+        /// Récupère les 8 dernieres secondes du buffer pour les utiliser
+        /// </summary>
         public void Cut()
         {
             this.Selection = new List<Bitmap>(this.Buffer.Images);

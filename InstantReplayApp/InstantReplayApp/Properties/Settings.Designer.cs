@@ -34,5 +34,28 @@ namespace InstantReplayApp.Properties {
                 this["SavePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Camera {
+            get {
+                return ((string)(this["Camera"]));
+            }
+            set {
+                this["Camera"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public int[] Speeds {
+            get {
+                return ((int[])(this["Speeds"]));
+            }
+            set {
+                this["Speeds"] = value;
+            }
+        }
     }
 }

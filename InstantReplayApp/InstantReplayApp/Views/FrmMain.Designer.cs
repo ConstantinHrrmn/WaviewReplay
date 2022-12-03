@@ -49,6 +49,9 @@
             this.lblBufferWarning = new System.Windows.Forms.Label();
             this.lblLiveWarning = new System.Windows.Forms.Label();
             this.pbLiveReplay = new System.Windows.Forms.PictureBox();
+            this.lblStatus = new System.Windows.Forms.Label();
+            this.btnOnScreenButtons = new System.Windows.Forms.Button();
+            this.btnSettings = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbLive)).BeginInit();
             this.gbInputSource.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbReplay)).BeginInit();
@@ -64,6 +67,7 @@
             this.pbLive.Size = new System.Drawing.Size(640, 360);
             this.pbLive.TabIndex = 0;
             this.pbLive.TabStop = false;
+            this.pbLive.Click += new System.EventHandler(this.pbLive_Click);
             // 
             // cmbSources
             // 
@@ -83,7 +87,7 @@
             this.btnCloseLiveInput.Name = "btnCloseLiveInput";
             this.btnCloseLiveInput.Size = new System.Drawing.Size(94, 49);
             this.btnCloseLiveInput.TabIndex = 3;
-            this.btnCloseLiveInput.Text = "Stop";
+            this.btnCloseLiveInput.Text = "STOP";
             this.btnCloseLiveInput.UseVisualStyleBackColor = false;
             this.btnCloseLiveInput.Click += new System.EventHandler(this.btnCloseLiveInput_Click);
             // 
@@ -130,6 +134,7 @@
             this.pbReplay.Size = new System.Drawing.Size(640, 360);
             this.pbReplay.TabIndex = 7;
             this.pbReplay.TabStop = false;
+            this.pbReplay.Click += new System.EventHandler(this.pbReplay_Click);
             // 
             // btnSetSavePath
             // 
@@ -138,7 +143,7 @@
             this.btnSetSavePath.Name = "btnSetSavePath";
             this.btnSetSavePath.Size = new System.Drawing.Size(159, 49);
             this.btnSetSavePath.TabIndex = 9;
-            this.btnSetSavePath.Text = "Set Save Path";
+            this.btnSetSavePath.Text = "SAVE";
             this.btnSetSavePath.UseVisualStyleBackColor = true;
             this.btnSetSavePath.Click += new System.EventHandler(this.btnSetSavePath_Click);
             // 
@@ -251,12 +256,47 @@
             this.pbLiveReplay.TabIndex = 30;
             this.pbLiveReplay.TabStop = false;
             // 
+            // lblStatus
+            // 
+            this.lblStatus.Font = new System.Drawing.Font("Arial Black", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatus.ForeColor = System.Drawing.Color.White;
+            this.lblStatus.Location = new System.Drawing.Point(1309, 476);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(320, 98);
+            this.lblStatus.TabIndex = 31;
+            this.lblStatus.Text = "-";
+            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnOnScreenButtons
+            // 
+            this.btnOnScreenButtons.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOnScreenButtons.Location = new System.Drawing.Point(17, 507);
+            this.btnOnScreenButtons.Name = "btnOnScreenButtons";
+            this.btnOnScreenButtons.Size = new System.Drawing.Size(202, 57);
+            this.btnOnScreenButtons.TabIndex = 32;
+            this.btnOnScreenButtons.Text = "BUTTONS";
+            this.btnOnScreenButtons.UseVisualStyleBackColor = true;
+            this.btnOnScreenButtons.Click += new System.EventHandler(this.btnOnScreenButtons_Click);
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSettings.Location = new System.Drawing.Point(225, 507);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(202, 57);
+            this.btnSettings.TabIndex = 33;
+            this.btnSettings.Text = "SETTINGS";
+            this.btnSettings.UseVisualStyleBackColor = true;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(168F, 168F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1643, 585);
+            this.ClientSize = new System.Drawing.Size(1645, 585);
+            this.Controls.Add(this.btnSettings);
+            this.Controls.Add(this.btnOnScreenButtons);
+            this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.pbLiveReplay);
             this.Controls.Add(this.lblLiveWarning);
             this.Controls.Add(this.lblBufferWarning);
@@ -314,6 +354,9 @@
         private System.Windows.Forms.Label lblBufferWarning;
         private System.Windows.Forms.Label lblLiveWarning;
         private System.Windows.Forms.PictureBox pbLiveReplay;
+        private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.Button btnOnScreenButtons;
+        private System.Windows.Forms.Button btnSettings;
     }
 }
 

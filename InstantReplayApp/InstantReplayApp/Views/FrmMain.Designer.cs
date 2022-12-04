@@ -29,14 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.pbLive = new System.Windows.Forms.PictureBox();
-            this.cmbSources = new System.Windows.Forms.ComboBox();
-            this.btnCloseLiveInput = new System.Windows.Forms.Button();
             this.lblInputResolution = new System.Windows.Forms.Label();
             this.lblDisplayResolution = new System.Windows.Forms.Label();
-            this.gbInputSource = new System.Windows.Forms.GroupBox();
             this.pbReplay = new System.Windows.Forms.PictureBox();
-            this.btnSetSavePath = new System.Windows.Forms.Button();
             this.fbdReplay = new System.Windows.Forms.FolderBrowserDialog();
             this.replayTimer = new System.Windows.Forms.Timer(this.components);
             this.lblReplay = new System.Windows.Forms.Label();
@@ -52,8 +49,9 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.btnOnScreenButtons = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
+            this.lblClock = new System.Windows.Forms.Label();
+            this.Clock = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pbLive)).BeginInit();
-            this.gbInputSource.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbReplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbReplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLiveReplay)).BeginInit();
@@ -68,28 +66,6 @@
             this.pbLive.TabIndex = 0;
             this.pbLive.TabStop = false;
             this.pbLive.Click += new System.EventHandler(this.pbLive_Click);
-            // 
-            // cmbSources
-            // 
-            this.cmbSources.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSources.Location = new System.Drawing.Point(6, 29);
-            this.cmbSources.Name = "cmbSources";
-            this.cmbSources.Size = new System.Drawing.Size(363, 32);
-            this.cmbSources.TabIndex = 1;
-            this.cmbSources.SelectedIndexChanged += new System.EventHandler(this.cmbSources_SelectedIndexChanged);
-            // 
-            // btnCloseLiveInput
-            // 
-            this.btnCloseLiveInput.BackColor = System.Drawing.Color.Black;
-            this.btnCloseLiveInput.Enabled = false;
-            this.btnCloseLiveInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCloseLiveInput.Location = new System.Drawing.Point(375, 20);
-            this.btnCloseLiveInput.Name = "btnCloseLiveInput";
-            this.btnCloseLiveInput.Size = new System.Drawing.Size(94, 49);
-            this.btnCloseLiveInput.TabIndex = 3;
-            this.btnCloseLiveInput.Text = "STOP";
-            this.btnCloseLiveInput.UseVisualStyleBackColor = false;
-            this.btnCloseLiveInput.Click += new System.EventHandler(this.btnCloseLiveInput_Click);
             // 
             // lblInputResolution
             // 
@@ -113,19 +89,6 @@
             this.lblDisplayResolution.Text = "Display resolution : Y x Y";
             this.lblDisplayResolution.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // gbInputSource
-            // 
-            this.gbInputSource.BackColor = System.Drawing.Color.Black;
-            this.gbInputSource.Controls.Add(this.cmbSources);
-            this.gbInputSource.Controls.Add(this.btnCloseLiveInput);
-            this.gbInputSource.ForeColor = System.Drawing.Color.Red;
-            this.gbInputSource.Location = new System.Drawing.Point(17, 12);
-            this.gbInputSource.Name = "gbInputSource";
-            this.gbInputSource.Size = new System.Drawing.Size(475, 82);
-            this.gbInputSource.TabIndex = 6;
-            this.gbInputSource.TabStop = false;
-            this.gbInputSource.Text = "Input Source";
-            // 
             // pbReplay
             // 
             this.pbReplay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -135,17 +98,6 @@
             this.pbReplay.TabIndex = 7;
             this.pbReplay.TabStop = false;
             this.pbReplay.Click += new System.EventHandler(this.pbReplay_Click);
-            // 
-            // btnSetSavePath
-            // 
-            this.btnSetSavePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSetSavePath.Location = new System.Drawing.Point(498, 32);
-            this.btnSetSavePath.Name = "btnSetSavePath";
-            this.btnSetSavePath.Size = new System.Drawing.Size(159, 49);
-            this.btnSetSavePath.TabIndex = 9;
-            this.btnSetSavePath.Text = "SAVE";
-            this.btnSetSavePath.UseVisualStyleBackColor = true;
-            this.btnSetSavePath.Click += new System.EventHandler(this.btnSetSavePath_Click);
             // 
             // replayTimer
             // 
@@ -287,6 +239,24 @@
             this.btnSettings.TabIndex = 33;
             this.btnSettings.Text = "SETTINGS";
             this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
+            // lblClock
+            // 
+            this.lblClock.Font = new System.Drawing.Font("Arial", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblClock.ForeColor = System.Drawing.Color.White;
+            this.lblClock.Location = new System.Drawing.Point(17, 9);
+            this.lblClock.Name = "lblClock";
+            this.lblClock.Size = new System.Drawing.Size(640, 98);
+            this.lblClock.TabIndex = 34;
+            this.lblClock.Text = "HH:mm:ss";
+            this.lblClock.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // Clock
+            // 
+            this.Clock.Enabled = true;
+            this.Clock.Interval = 1000;
+            this.Clock.Tick += new System.EventHandler(this.Clock_Tick);
             // 
             // FrmMain
             // 
@@ -294,6 +264,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1645, 585);
+            this.Controls.Add(this.lblClock);
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.btnOnScreenButtons);
             this.Controls.Add(this.lblStatus);
@@ -306,24 +277,23 @@
             this.Controls.Add(this.tbxCommand);
             this.Controls.Add(this.tbReplay);
             this.Controls.Add(this.lblReplay);
-            this.Controls.Add(this.btnSetSavePath);
             this.Controls.Add(this.pbReplay);
-            this.Controls.Add(this.gbInputSource);
             this.Controls.Add(this.lblDisplayResolution);
             this.Controls.Add(this.lblInputResolution);
             this.Controls.Add(this.pbLive);
             this.DoubleBuffered = true;
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Waview Instant Replay";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FrmMain_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pbLive)).EndInit();
-            this.gbInputSource.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbReplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbReplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLiveReplay)).EndInit();
@@ -335,13 +305,9 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pbLive;
-        private System.Windows.Forms.ComboBox cmbSources;
-        private System.Windows.Forms.Button btnCloseLiveInput;
         private System.Windows.Forms.Label lblInputResolution;
         private System.Windows.Forms.Label lblDisplayResolution;
-        private System.Windows.Forms.GroupBox gbInputSource;
         private System.Windows.Forms.PictureBox pbReplay;
-        private System.Windows.Forms.Button btnSetSavePath;
         private System.Windows.Forms.FolderBrowserDialog fbdReplay;
         private System.Windows.Forms.Timer replayTimer;
         private System.Windows.Forms.Label lblReplay;
@@ -357,6 +323,8 @@
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Button btnOnScreenButtons;
         private System.Windows.Forms.Button btnSettings;
+        private System.Windows.Forms.Label lblClock;
+        private System.Windows.Forms.Timer Clock;
     }
 }
 

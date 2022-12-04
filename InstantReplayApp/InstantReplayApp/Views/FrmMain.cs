@@ -18,10 +18,8 @@ namespace InstantReplayApp
     {
         private MainManager _mainManager;
 
-        private int selectedCameraIndex = -1;
-
         public MainManager MainManager { get => _mainManager; set => _mainManager = value; }
-        
+
         public FrmMain()
         {
             InitializeComponent();
@@ -34,35 +32,19 @@ namespace InstantReplayApp
 
             //this.lblSaveReplayPath.Text = "Replay path : " + Properties.Settings.Default.SavePath;
             this.MainManager.SetSavePath(Properties.Settings.Default.SavePath);
-            this.LoadInputList();
-        }
 
-        public void UpdateSavePathLabel(string text)
-        {
-            this.btnSetSavePath.Text = text;
+            //this.LoadInputList();
         }
 
         #region Camera Selection
-        public void LoadInputList()
+
+        public void SelectedIndexInputChange()
         {
-
-            // On vide la liste des sources
-            this.cmbSources.Items.Clear();
-
-            // On ajoute les sources dans la liste
-            foreach (FilterInfo item in this.MainManager.LoadInputList())
-                this.cmbSources.Items.Add(item.Name);
-        }
-
-        private void cmbSources_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            this.selectedCameraIndex = this.cmbSources.SelectedIndex;
-            this.MainManager.StartStream(this.selectedCameraIndex);
             this.ChangeLiveWarningVisibility();
-            this.btnCloseLiveInput.Enabled = true;
             this.tbxCommand.Focus();
             this.Focus();
         }
+
         #endregion
 
         #region PictureBox Controls
@@ -87,7 +69,7 @@ namespace InstantReplayApp
             int newPositionY = this.pbLive.Location.Y + this.pbLive.Size.Height + 10;
             int newPositionX = this.pbLive.Location.X + this.pbLive.Size.Width + 10;
 
-            this.gbInputSource.Location = new Point(this.gbInputSource.Location.X, newPositionY);
+            //this.gbInputSource.Location = new Point(this.gbInputSource.Location.X, newPositionY);
             this.pbReplay.Location = new Point(newPositionX, this.pbReplay.Location.Y);
 
             this.ChangeDisplayResolutionLabel(small_resolution);
@@ -96,6 +78,11 @@ namespace InstantReplayApp
         public Size GetPictureBoxResolution()
         {
             return this.pbLive.Size;
+        }
+        
+        public Size GetSmallBoxResoltion()
+        {
+            return this.pbLiveReplay.Size;
         }
         #endregion
 
@@ -198,81 +185,7 @@ namespace InstantReplayApp
         #region BUTTON CLICK
         public void ExecuteCommand(char command)
         {
-            switch (command)
-            {
-                case 'i':
-                    this.In();
-                    break;
-                case 'o':
-                    this.Out();
-                    break;
-                case 'w':
-                    this.StartBuffer();
-                    break;
-                case 'x':
-                    this.MainManager.ClearSelection();
-                    break;
-                case 'c':
-                    this.Cut();
-                    break;
-                case 'e':
-                    this.SecondDisplay();
-                    break;
-                case 'r':
-                    this.GoLive();
-                    break;
-                case 't':
-                    this.Play();
-                    break;
-                case 'z':
-                    this.Pause();
-                    break;
-                case 'a':
-                    this.Down(25);
-                    break;
-                case 's':
-                    this.Down(10);
-                    break;
-                case 'd':
-                    this.Down(1);
-                    break;
-                case 'j':
-                    this.Up(25);
-                    break;
-                case 'k':
-                    this.Up(10);
-                    break;
-                case 'l':
-                    this.Up(1);
-                    break;
-                case 'n':
-                    this.ConvertTovideo();
-                    break;
-
-                case 'b':
-                    this.IsReplayLive();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void btnSetSavePath_Click(object sender, EventArgs e)
-        {
-            if (fbdReplay.ShowDialog() == DialogResult.OK)
-            {
-                //this.lblSaveReplayPath.Text = "Replay path : " + fbdReplay.SelectedPath;
-                this.MainManager.SetSavePath(fbdReplay.SelectedPath);
-                Properties.Settings.Default.SavePath = fbdReplay.SelectedPath;
-                Properties.Settings.Default.Save();
-            }
-        }
-
-        private void btnCloseLiveInput_Click(object sender, EventArgs e)
-        {
-            this.btnCloseLiveInput.Enabled = false;
-            this.MainManager.StopStream();
-            this.DisplayLiveImage(null);
+            this.MainManager.ExecuteCommand(command);
         }
 
         private void pbLive_Click(object sender, EventArgs e)
@@ -291,8 +204,12 @@ namespace InstantReplayApp
         {
             FrmButtons buttons = new FrmButtons(this.MainManager);
             buttons.Show();
-        }        
+        }
 
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            this.MainManager.OpenSettingsForm();
+        }        
 
         #endregion
 
@@ -364,7 +281,7 @@ namespace InstantReplayApp
         /// <summary>
         /// Get last 8 seconds to edit
         /// </summary>
-        private void Cut()
+        public void Cut()
         {
             this.MainManager.Cut();
         }
@@ -372,7 +289,7 @@ namespace InstantReplayApp
         /// <summary>
         /// Make the out mark in the edit video
         /// </summary>
-        private void Out()
+        public void Out()
         {
             this.MainManager.Out();
         }
@@ -380,14 +297,14 @@ namespace InstantReplayApp
         /// <summary>
         /// Make the in mark in the edit video
         /// </summary>
-        private void In(){
+        public void In(){
             this.MainManager.In();
         }
 
         /// <summary>
         /// Pause the Replay editor
         /// </summary>
-        private void Pause()
+        public void Pause()
         {
             this.StopReplayTimer();
         }
@@ -395,7 +312,7 @@ namespace InstantReplayApp
         /// <summary>
         /// Play the Replay editior
         /// </summary>
-        private void Play()
+        public void Play()
         {
             this.StartReplayTimer();
         }
@@ -422,7 +339,6 @@ namespace InstantReplayApp
         {
             this.MainManager.NewDisplay();
             this.Focus();
-            
         }
 
         public void GoLive()
@@ -487,8 +403,18 @@ namespace InstantReplayApp
             this.lblStatus.Invoke((MethodInvoker)(() => this.lblStatus.ForeColor = c));
         }
 
-        #endregion
-        
 
+
+        #endregion
+
+        private void Clock_Tick(object sender, EventArgs e)
+        {
+            this.lblClock.Text = DateTime.Now.ToString("HH:mm:ss");
+        }
+
+        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.MainManager.StopStream();
+        }
     }
 }

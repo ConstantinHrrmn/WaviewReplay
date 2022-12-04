@@ -57,5 +57,16 @@ namespace InstantReplayApp.Properties {
                 this["Speeds"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public char[] Shortcuts {
+            get {
+                return ((char[])(this["Shortcuts"]));
+            }
+            set {
+                this["Shortcuts"] = value;
+            }
+        }
     }
 }

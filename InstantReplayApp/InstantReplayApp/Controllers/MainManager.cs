@@ -18,19 +18,25 @@ namespace InstantReplayApp
         private const int DEFAULT_PICTUREBOX_RESOLUTION_POURCENTAGE = 100;
 
         private FrmMain _frmMain;
+        private FrmVideoDisplay _liveDisplay;
+        private FrmVideoDisplay _replayDisplay;
+        private FrmSettings _frmSettings;
+
         private DisplayReplay _frmReplay;
         private LiveInputManager _liveInputManager;
         private ReplayManager _replayManager;
 
-        private FrmVideoDisplay _liveDisplay;
-        private FrmVideoDisplay _replayDisplay;
-
         private int _intervalFPS = ReplayManager.DEFAULT_PLAYBACK_POURCENTAGE;
-
-        
         private int _replayIndex = DEFAULT_REPLAY_INDEX;
 
-        
+        private int selectedCameraIndex = -1;
+        private List<Tuple<string, char, Action>> _functions;
+
+        public static readonly char[] DEFAULT_COMMAND_SHORTCUTS =
+            new char[] {
+                        'i', 'o', 'w', 'x', 'c', 'e', 'r', 't', 'z', 'a', 's', 'd', 'j', 'k', 'l', 'n', 'b'
+            };
+
         #endregion
 
         #region GETTER / SETTER publiques
@@ -41,6 +47,8 @@ namespace InstantReplayApp
         public int IntervalPourcentage { get => _intervalFPS; set => _intervalFPS = value; }
         public FrmVideoDisplay LiveDisplay { get => _liveDisplay; set => _liveDisplay = value; }
         public FrmVideoDisplay ReplayDisplay { get => _replayDisplay; set => _replayDisplay = value; }
+        public FrmSettings FrmSettings { get => _frmSettings; set => _frmSettings = value; }
+        public List<Tuple<string, char, Action>> Functions { get => _functions; set => _functions = value; }
         #endregion
 
         /// <summary>
@@ -70,6 +78,7 @@ namespace InstantReplayApp
 
             this.ReplayManager.IsReplayLive = true;
             this.FrmReplay = new DisplayReplay(this);
+            this.FrmSettings = new FrmSettings(this);
 
             this.SetPictureboxSizes(DEFAULT_PICTUREBOX_RESOLUTION_POURCENTAGE);
 
@@ -77,6 +86,8 @@ namespace InstantReplayApp
             this.ReplayDisplay = null;
 
             this.LoadSpeedsFromDisk();
+            this.SetShortcuts();
+            this.SetUpFunctions();
         }
 
         #region LIVE
@@ -107,6 +118,7 @@ namespace InstantReplayApp
         public void StopStream()
         {
             this.LiveInputManager.StopStream();
+            this.FrmMain.ChangeLiveWarningVisibility();
         }
 
         /// <summary>
@@ -184,11 +196,16 @@ namespace InstantReplayApp
         /// <param name="path">le chemin complet jusqu'au dossier</param>
         public void SetSavePath(string path)
         {
+            Properties.Settings.Default.SavePath = path;
             this.ReplayManager.SetSavePath(path);
-            if (path != null)
-                this.FrmMain.UpdateSavePathLabel("SAVE PATH");
-            else
-                this.FrmMain.UpdateSavePathLabel("NO SAVE PATH");
+        }
+
+        /// <summary>
+        /// Récupère le chemin d'acces au dossier des replay
+        /// </summary>
+        /// <returns>Le chemin d'acces au dossier</returns>
+        public string GetSavePath(){
+            return this.ReplayManager.SavePath;
         }
 
         /// <summary>
@@ -334,6 +351,35 @@ namespace InstantReplayApp
         }
 
         /// <summary>
+        /// Retourne la vitesse à l'index du tableau
+        /// </summary>
+        /// <param name="index">l'index du tableau</param>
+        /// <returns>la vitesse</returns>
+        public int GetSpeed(int index)
+        {
+            return this.ReplayManager.GetSpeed(index);
+        }
+
+        /// <summary>
+        /// Sauvegarder les vitesses de scroll dans les settings
+        /// </summary>
+        public void SaveSpeedsToDisk()
+        {
+            Properties.Settings.Default.Speeds = this.GetSpeeds();
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Changer toutes les vitesses
+        /// </summary>
+        /// <param name="speeds">les nouvelles vitesses</param>
+        public void SetSpeeds(int[] speeds)
+        {
+            this.ReplayManager.Speeds = speeds;
+            this.SaveSpeedsToDisk();
+        }
+
+        /// <summary>
         /// Permet de changer une des vitesses
         /// </summary>
         /// <param name="index">l'index de la vitesse a changer</param>
@@ -415,13 +461,11 @@ namespace InstantReplayApp
             newSize.Width = (int)(newSize.Width * (pourcentage / 100.0));
             newSize.Height = (int)(newSize.Height * (pourcentage / 100.0));
 
+
             this.ReplayManager.ReplaySize = newSize;
             this.LiveInputManager.LiveSize = newSize;
         }
-        public void SendCommand(char command)
-        {
-            this.FrmMain.ExecuteCommand(command);
-        }
+
         #endregion
 
         #region Secondary Windows
@@ -437,7 +481,118 @@ namespace InstantReplayApp
                 this.ReplayDisplay.DisplayImage(Image);
         }
         #endregion
-        
+
+        #region SETTINGS FORM
+
+        public void OpenSettingsForm()
+        {
+            this.FrmSettings = new FrmSettings(this);
+            this.FrmSettings.Show();
+
+            if (this.selectedCameraIndex != -1)
+                this.FrmSettings.CmbChangeIndex(this.selectedCameraIndex);
+        }
+
+        public void ChangeInput(int index)
+        {
+            this.selectedCameraIndex = index;
+            this.StartStream(index);
+            this.FrmMain.SelectedIndexInputChange();
+        }
+
+        public void CloseLive()
+        {
+            this.StopStream();
+            this.FrmMain.DisplayLiveImage(null);
+        }
+
+        public void SaveShortcut(int index, char value)
+        {
+            Properties.Settings.Default.Shortcuts[index] = value;
+            Properties.Settings.Default.Save();
+
+            //this.FrmMain.SetUpFunctions();
+        }
+
+        /// <summary>
+        /// Set the shortcuts for the buttons
+        /// </summary>
+        public void SetShortcuts()
+        {
+            if (Properties.Settings.Default.Shortcuts == null)
+            {
+                Properties.Settings.Default.Shortcuts = DEFAULT_COMMAND_SHORTCUTS;
+            }
+        }
+
+        public void ResetShortcuts()
+        {
+            Properties.Settings.Default.Shortcuts = DEFAULT_COMMAND_SHORTCUTS;
+            this.SetUpFunctions();
+        }
+
+        public void ChangeShortcut(int index, char value)
+        {
+            Properties.Settings.Default.Shortcuts[index] = value;
+            Properties.Settings.Default.Save();
+
+            this.Functions[index] = new Tuple<string, char, Action>(this.Functions[index].Item1, Properties.Settings.Default.Shortcuts[index], this.Functions[index].Item3);
+        }
+
+        public bool ShortcutUsed(char shortcut)
+        {
+            foreach (char item in Properties.Settings.Default.Shortcuts)
+            {
+                if (item == shortcut)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
+        /// Associer toutes les touches a des fonctions et des labels
+        /// </summary>
+        public void SetUpFunctions()
+        {
+            this.Functions = new List<Tuple<string, char, Action>>();
+
+            this.Functions.Add(new Tuple<string, char, Action>("IN", Properties.Settings.Default.Shortcuts[0], () => this.In()));
+            this.Functions.Add(new Tuple<string, char, Action>("OUT", Properties.Settings.Default.Shortcuts[1], () => this.Out()));
+            this.Functions.Add(new Tuple<string, char, Action>("BUFFER", Properties.Settings.Default.Shortcuts[2], () => this.FrmMain.StartBuffer()));
+            this.Functions.Add(new Tuple<string, char, Action>("CLEAR", Properties.Settings.Default.Shortcuts[3], () => this.ClearSelection()));
+            this.Functions.Add(new Tuple<string, char, Action>("CUT", Properties.Settings.Default.Shortcuts[4], () => this.Cut()));
+            this.Functions.Add(new Tuple<string, char, Action>("2nd DISPLAY", Properties.Settings.Default.Shortcuts[5], () => this.FrmMain.SecondDisplay()));
+            this.Functions.Add(new Tuple<string, char, Action>("GO LIVE", Properties.Settings.Default.Shortcuts[6], () => this.GoLiveReplay()));
+            this.Functions.Add(new Tuple<string, char, Action>("PLAY", Properties.Settings.Default.Shortcuts[7], () => this.FrmMain.StartReplayTimer()));
+            this.Functions.Add(new Tuple<string, char, Action>("PAUSE", Properties.Settings.Default.Shortcuts[8], () => this.FrmMain.StopReplayTimer()));
+            this.Functions.Add(new Tuple<string, char, Action>("SLOW DOWN", Properties.Settings.Default.Shortcuts[9], () => this.FrmMain.Down(this.GetSpeed(0))));
+            this.Functions.Add(new Tuple<string, char, Action>("SLOWER", Properties.Settings.Default.Shortcuts[10], () => this.FrmMain.Down(this.GetSpeed(1))));
+            this.Functions.Add(new Tuple<string, char, Action>("SLOWEST", Properties.Settings.Default.Shortcuts[11], () => this.FrmMain.Down(this.GetSpeed(2))));
+            this.Functions.Add(new Tuple<string, char, Action>("SPEED UP", Properties.Settings.Default.Shortcuts[12], () => this.FrmMain.Up(this.GetSpeed(3))));
+            this.Functions.Add(new Tuple<string, char, Action>("FASTER", Properties.Settings.Default.Shortcuts[13], () => this.FrmMain.Up(this.GetSpeed(4))));
+            this.Functions.Add(new Tuple<string, char, Action>("FASTEST", Properties.Settings.Default.Shortcuts[14], () => this.FrmMain.Up(this.GetSpeed(5))));
+            this.Functions.Add(new Tuple<string, char, Action>("TO VIDEO", Properties.Settings.Default.Shortcuts[15], () => this.ConvertToVideo()));
+            this.Functions.Add(new Tuple<string, char, Action>("IS LIVE", Properties.Settings.Default.Shortcuts[16], () => this.FrmMain.IsReplayLive()));
+        }
+
+        public void ExecuteCommand(char command)
+        {
+            foreach (Tuple<string, char, Action> function in this.Functions)
+            {
+                if (command == function.Item2)
+                {
+                    function.Item3.Invoke();
+                    return;
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
     }

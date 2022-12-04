@@ -25,7 +25,7 @@ namespace InstantReplayApp
 
         public void UpdateButtons()
         {
-            int[] speeds = this.Manager.GetSpeeds();
+            this.speeds = this.Manager.GetSpeeds();
             
             this.btnRewind25.Text = speeds[0].ToString();
             this.btnRewind10.Text = speeds[1].ToString();
@@ -134,7 +134,7 @@ namespace InstantReplayApp
 
         private void FrmButtons_KeyPress(object sender, KeyPressEventArgs e)
         {
-            this.Manager.SendCommand((char)e.KeyChar);
+            this.Manager.ExecuteCommand((char)e.KeyChar);
         }
 
         #endregion

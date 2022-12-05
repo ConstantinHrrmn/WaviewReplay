@@ -11,6 +11,7 @@ namespace InstantReplayApp
     public class Buffer
     {
         private List<Bitmap> _bufferImages;
+        private List<Bitmap> _bufferSelection;
         private int _bufferSize;
         private int _bufferSeconds;
         private int _fps;
@@ -25,10 +26,12 @@ namespace InstantReplayApp
         public int BufferSeconds { get => _bufferSeconds; set => _bufferSeconds = value; }
         public int Fps { get => _fps; set => _fps = value; }
         public bool IsRunning { get => _IsRunning; set => _IsRunning = value; }
+        public List<Bitmap> BufferSelection { get => _bufferSelection; set => _bufferSelection = value; }
 
         public Buffer()
         {
             this.Images = new List<Bitmap>();
+            this.BufferSelection = new List<Bitmap>();
             this.BufferSeconds = DEFAULT_SECONDS;
             this.Fps = DEFAULT_FPS;
             this.BufferSize = this.BufferSeconds * this.Fps;

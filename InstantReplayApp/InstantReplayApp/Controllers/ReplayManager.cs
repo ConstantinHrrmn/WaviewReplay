@@ -156,12 +156,12 @@ namespace InstantReplayApp
                 string path = Path.Combine(this.SavePath, "replay_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".avi");
 
                 // create new video file
-                writer.Open(path, 1920, 1080, this.PlayBackFPS, VideoCodec.MPEG4);
+                writer.Open(path, this.Buffer.BufferSelection[0].Width, this.Buffer.BufferSelection[0].Height, this.PlayBackFPS, VideoCodec.MPEG4);
 
 
                 mm.Final("Process...", Color.Red);
 
-                foreach (Bitmap item in this.ToDisplay)
+                foreach (Bitmap item in this.Buffer.BufferSelection)
                 {
                     writer.WriteVideoFrame(item);
                     
@@ -221,6 +221,7 @@ namespace InstantReplayApp
         public void Out(int endFrame)
         {
             this.ToDisplay = new List<Bitmap>(this.ToDisplay.GetRange(0, endFrame));
+            this.Buffer.BufferSelection = this.ToDisplay;
         }
 
         /// <summary>
@@ -241,7 +242,9 @@ namespace InstantReplayApp
             this.Selection = new List<Bitmap>(this.Buffer.Images);
             this.ToDisplay = new List<Bitmap>(this.Selection);
             this.IsReplayLive = false;
+            this.Buffer.BufferSelection = this.ToDisplay;
         }
+
 
         /// <summary>
         /// Vidéo in
@@ -249,6 +252,7 @@ namespace InstantReplayApp
         public void In(int startFrame)
         {
             this.ToDisplay = new List<Bitmap>(this.ToDisplay.GetRange(startFrame, this.ToDisplay.Count - startFrame));
+            this.Buffer.BufferSelection = this.ToDisplay;
         }
 
         /// <summary>
@@ -257,6 +261,7 @@ namespace InstantReplayApp
         public void ClearSelection()
         {
             this.ToDisplay = new List<Bitmap>(this.Selection);
+            this.Buffer.BufferSelection = this.ToDisplay;
         }
 
         /// <summary>

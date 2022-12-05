@@ -147,6 +147,11 @@ namespace InstantReplayApp
         #region Images to Video Convert
         public void ConvertToVideo(MainManager mm)
         {
+            int w = 1920;
+            int h = 1080;
+
+            Size s = new Size(w, h);
+
             if (this.Buffer.Images.Count > 5)
             {
                 this.StopBuffer();
@@ -156,14 +161,24 @@ namespace InstantReplayApp
                 string path = Path.Combine(this.SavePath, "replay_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".avi");
 
                 // create new video file
-                writer.Open(path, this.Buffer.BufferSelection[0].Width, this.Buffer.BufferSelection[0].Height, this.PlayBackFPS, VideoCodec.MPEG4);
+                writer.Open(path, w, h, this.PlayBackFPS, VideoCodec.MPEG4);
 
+                bool need_resize = w != this.Buffer.BufferSelection[0].Width;
 
                 mm.Final("Process...", Color.Red);
 
                 foreach (Bitmap item in this.Buffer.BufferSelection)
                 {
-                    writer.WriteVideoFrame(item);
+                    if (need_resize)
+                    {
+                        writer.WriteVideoFrame(new Bitmap(item, s));
+                    }
+                    else
+                    {
+                        writer.WriteVideoFrame(item);
+                    }
+                        
+                   
                     
                 }
                     

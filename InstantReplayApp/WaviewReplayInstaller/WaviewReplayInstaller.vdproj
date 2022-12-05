@@ -63,6 +63,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6484D0B420F341228C9C5700F4DF43B4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_91F84CA3CE3C4FEAB42C4C31138A4C41"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -95,12 +101,6 @@
         {
         "MsmKey" = "8:_F8A74CC68CD861FC55BB984F92EE7F07"
         "OwnerKey" = "8:_6448A6843C3C4E64825EC49B1520585B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F8A74CC68CD861FC55BB984F92EE7F07"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -145,6 +145,12 @@
         "OwnerKey" = "8:_21B9E5407CA758CC1549F75ECF4DEC3E"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F8A74CC68CD861FC55BB984F92EE7F07"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -163,6 +169,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -179,6 +193,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -332,6 +354,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6484D0B420F341228C9C5700F4DF43B4"
+            {
+            "SourcePath" = "8:Debug\\WaviewReplayInstaller.msi"
+            "TargetName" = "8:WaviewReplayInstaller.msi"
+            "Tag" = "8:"
+            "Folder" = "8:_D10BF7B47428442B8E98B2457F95F777"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_91F84CA3CE3C4FEAB42C4C31138A4C41"
             {
             "SourcePath" = "8:..\\..\\..\\..\\..\\Desktop\\WIR_logo.ico"
@@ -453,7 +495,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_20DAE533311143F98FD3A93B6FB28D57"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -517,11 +559,11 @@
         "UpgradeCode" = "8:{102228D2-EC39-404E-A06F-348CF8BB4453}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
-        "InstallAllUsers" = "11:FALSE"
+        "InstallAllUsers" = "11:TRUE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Constantin"
+        "Manufacturer" = "8:Waview"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:WaviewReplayInstaller"
@@ -530,11 +572,11 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_91F84CA3CE3C4FEAB42C4C31138A4C41"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
-        "TargetPlatform" = "3:0"
+        "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"
@@ -633,7 +675,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_9EFD77E012CD4223B00D28C4E57013D7"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_7FC923651C9946B28A41CE4AF76CB760"
             {
             "Name" = "8:Waview Instant Replay"
             "Arguments" = "8:"
